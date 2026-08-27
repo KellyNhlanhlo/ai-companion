@@ -33,7 +33,7 @@ function clean(text: string) {
 function titleCase(text: string) {
   return text
     .split(" ")
-    .map((w) => (w.length > 3 ? w[0].toUpperCase() + w.slice(1) : w))
+    .map((w) => (w.length > 3 ? (w[0] ?? "").toUpperCase() + w.slice(1) : w))
     .join(" ")
     .replace(/^./, (c) => c.toUpperCase());
 }
@@ -59,7 +59,7 @@ function keywords(prompt: string, limit = 6) {
 function detectRecipient(prompt: string): string | undefined {
   const m = prompt.match(/\bto\s+(?:my\s+)?([a-z]+(?:\s+[a-z]+)?)/i);
   if (!m) return undefined;
-  const who = m[1].toLowerCase().trim();
+  const who = (m[1] ?? "").toLowerCase().trim();
   const roles: Record<string, string> = {
     boss: "Manager",
     manager: "Manager",
@@ -71,7 +71,7 @@ function detectRecipient(prompt: string): string | undefined {
     supervisor: "Supervisor",
     hr: "HR",
   };
-  const first = who.split(" ")[0];
+  const first = who.split(" ")[0] ?? "";
   return roles[first] ?? (STOPWORDS.has(first) ? undefined : titleCase(who));
 }
 
